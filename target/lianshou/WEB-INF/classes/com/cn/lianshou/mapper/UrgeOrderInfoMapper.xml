@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.lianshou.mapper.UrgeOrderInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.cn.lianshou.entity.UrgeOrderInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="urge_user_id" property="urgeUserId" jdbcType="BIGINT" />
+    <result column="urge_name" property="urgeName" jdbcType="VARCHAR" />
+    <result column="borrow_name" property="borrowName" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    <result column="real_amount" property="realAmount" jdbcType="VARCHAR" />
+    <result column="borrow_time" property="borrowTime" jdbcType="TIMESTAMP" />
+    <result column="time_limit" property="timeLimit" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="INTEGER" />
+    <result column="repay_time" property="repayTime" jdbcType="VARCHAR" />
+    <result column="penalty_day" property="penaltyDay" jdbcType="VARCHAR" />
+    <result column="penalty_amout" property="penaltyAmout" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="req_ext1" property="reqExt1" jdbcType="VARCHAR" />
+    <result column="req_ext2" property="reqExt2" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 基本的sql查询条件公共引用 -->
+  <sql id="searchBy">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test=" id != null and id != '' ">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test=" urgeId != null and urgeId != '' ">
+        urge_id = #{urgeId,jdbcType=BIGINT}
+      </if>
+      <if test="urgeName != null and urgeName != '' ">
+        and urge_name = #{urgeName,jdbcType=VARCHAR}
+      </if>
+      <if test="borrowName != null and borrowName != '' ">
+        and borrow_name = #{borrowName,jdbcType=VARCHAR}
+      </if>
+      <if test="channel != null and channel != '' ">
+        and channel = #{channel,jdbcType=VARCHAR}
+      </if>
+      <if test="orderNo != null and orderNo != '' ">
+        and order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null and phone != '' ">
+        and phone = #{phone,jdbcType=INTEGER}
+      </if>
+      <if test="timeLimit != null and timeLimit != '' ">
+        and time_limit = #{timeLimit,jdbcType=VARCHAR}
+      </if>
+      <if test="penaltyDay != null and penaltyDay != '' ">
+        and penalty_day = #{penaltyDay,jdbcType=VARCHAR}
+      </if>
+      <if test="level != null and level != '' ">
+        and level = #{level,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null and state != '' ">
+        and state = #{state,jdbcType=INTEGER}
+      </if>
+    </trim>
+  </sql>
+
+  <!--查询催收订单-->
+  <select id="selectAll" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM cs_urge_order_info
+    <include refid="searchBy" />
+  </select>
+
+  <select id="selectWaitRepayOrderList" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM cs_urge_order_info
+    WHERE state != 50;
+  </select>
+
+  <insert id="insert" parameterType="com.cn.lianshou.entity.UrgeOrderInfo">
+    insert into cs_urge_order_info (urge_name,urge_user_id,borrow_name,channel,order_no,phone,amount,real_amount,borrow_time,time_limit,unit,repay_time,penalty_day,penalty_amout,state,level,create_time,update_time,req_ext1,req_ext2)
+    values (#{urgeName},#{urgeUserId},#{borrowName},#{channel},#{orderNo},#{phone},#{amount},#{realAmount},#{borrowTime},#{timeLimit},#{unit},#{repayTime},#{penaltyDay},#{penaltyAmout},#{state},#{level},now(),now(),'','');
+  </insert>
+
+  <select id="selectByState" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT * FROM cs_urge_order_info WHERE state = #{state} ORDER BY amount DESC
+  </select>
+
+  <update id="updateSelective" parameterType="java.util.HashMap">
+    update cs_urge_order_info
+    <set>
+      <if test="urgeUserId != null and urgeUserId != '' ">
+        urge_user_id = #{urgeUserId},
+      </if>
+      <if test="urgeName != null and urgeName != ''  ">
+        urge_name = #{urgeName},
+      </if>
+      <if test="channel != null and channel != '' ">
+        channel = #{channel},
+      </if>
+      <if test="borrowName != null and borrowName != '' ">
+        borrow_name = #{borrowName},
+      </if>
+      <if test="amount != null and amount != '' ">
+        amount = #{amount},
+      </if>
+      <if test="realAmount != null and realAmount != '' ">
+        real_amount = #{realAmount},
+      </if>
+      <if test="borrowTime != null and borrowTime != '' ">
+        borrow_time = #{borrowTime},
+      </if>
+      <if test="timeLimit != null and timeLimit != '' ">
+        time_limit = #{timeLimit},
+      </if>
+      <if test="unit != null and unit != '' ">
+        unit = #{unit},
+      </if>
+      <if test="state != null and state != '' ">
+        state = #{state},
+      </if>
+      <if test="level != null and level != '' ">
+        level = #{level},
+      </if>
+      <if test="repayTime != null and repayTime != ''">
+        repay_time = #{repayTime},
+      </if>
+      <if test="penaltyDay != null and penaltyDay != ''">
+        penalty_day = #{penaltyDay},
+      </if>
+      <if test="penaltyAmout != null and penaltyAmout != ''">
+        penalty_amout = #{penaltyAmout}
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

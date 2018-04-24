@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cn.lianshou.mapper.SystemConfigMapper" >
+
+  <resultMap id="BaseResultMap" type="com.cn.lianshou.entity.SystemConfig" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="time_limit" property="timeLimit" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="penalty_fee" property="penaltyFee" jdbcType="VARCHAR" />
+    <result column="penalty_amount_max" property="penaltyAmountMax" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="req_ext1" property="reqExt1" jdbcType="VARCHAR" />
+    <result column="req_ext2" property="reqExt2" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <!-- 基本的sql查询条件公共引用 -->
+  <sql id="searchBy">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test=" id != null and id != '' ">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="channel != null and channel != '' ">
+        and channel = #{channel,jdbcType=VARCHAR}
+      </if>
+      <if test="timeLimit != null and timeLimit != '' ">
+        and time_limit = #{timeLimit,jdbcType=VARCHAR}
+      </if>
+      <if test="unit != null and unit != '' ">
+        and unit = #{unit,jdbcType=VARCHAR}
+      </if>
+      <if test="penaltyFee != null and penaltyFee != '' ">
+        and penalty_fee = #{penaltyFee,jdbcType=VARCHAR}
+      </if>
+      <if test="penaltyAmountMax != null and penaltyAmountMax != '' ">
+        and penalty_amount_max = #{penaltyAmountMax,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null and state != '' ">
+        and state = #{state,jdbcType=VARCHAR}
+      </if>
+      <if test="updateUserId != null and updateUserId != '' ">
+        and update_user_id = #{updateUserId,jdbcType=BIGINT}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="query" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM cs_sys_config
+    <include refid="searchBy" />
+  </select>
+
+  <insert id="save" parameterType="com.cn.lianshou.entity.SystemConfig">
+    insert into cs_sys_config (channel,time_limit,unit,penalty_fee,penalty_amount_max,state,update_user_id,create_time,update_time,req_ext1,req_ext2)
+    values (#{channel},#{timeLimit},#{unit},#{penaltyFee},#{penaltyAmountMax},#{state},#{updateUserId},now(),now(),'','');
+  </insert>
+
+  <update id="updateSelective" parameterType="java.util.HashMap">
+    update cs_sys_config
+    <set>
+      <if test="timeLimit != null and timeLimit != '' ">
+        time_limit = #{timeLimit},
+      </if>
+      <if test="penaltyFee != null and penaltyFee != ''  ">
+        penalty_fee = #{penaltyFee},
+      </if>
+      <if test="penaltyAmountMax != null and penaltyAmountMax != '' ">
+        penalty_amount_max = #{penaltyAmountMax},
+      </if>
+      <if test="state != null and state != '' ">
+        state = #{state},
+      </if>
+      <if test="updateUserId != null and updateUserId != '' ">
+        update_user_id = #{updateUserId},
+      </if>
+      <if test="updateTime != null and updateTime != '' ">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+</mapper>

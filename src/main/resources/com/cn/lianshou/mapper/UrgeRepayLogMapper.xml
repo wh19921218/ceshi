@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.lianshou.mapper.UrgeRepayLogMapper" >
+
+  <resultMap id="BaseResultMap" type="com.cn.lianshou.entity.UrgeRepayLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="urge_order_id" property="urgeOrderId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="urge_user_id" property="urgeUserId" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="promise_time" property="promiseTime" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="way" property="way" jdbcType="VARCHAR" />
+    <result column="req_ext1" property="reqExt1" jdbcType="VARCHAR" />
+    <result column="req_ext2" property="reqExt2" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <!-- 基本的sql查询条件公共引用 -->
+  <sql id="searchBy">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test=" id != null and id != '' ">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test=" channel != null and channel != '' ">
+        and channel = #{channel,jdbcType=VARCHAR}
+      </if>
+      <if test="realName != null and realName != '' ">
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null and phone != '' ">
+        and phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null and sex != '' ">
+        and sex = #{sex,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null and age != '' ">
+        and age = #{age,jdbcType=VARCHAR}
+      </if>
+      <if test="idNo != null and idNo != '' ">
+        and id_no = #{idNo,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="selectBorrowUserInfo" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM cs_borrow_user_info
+    <include refid="searchBy" />
+  </select>
+
+  <insert id="insert" parameterType="com.cn.lianshou.entity.UrgeRepayLog">
+    INSERT INTO cs_urge_repay_log (urge_order_id,order_no,urge_user_id,state,remark,promise_time,create_time,way,req_ext1,req_ext2)
+    VALUES (#{urgeOrderId},#{orderNo},#{urgeUserId},#{state},#{remark},#{promiseTime},now(),#{way},NULL,NULL)
+  </insert>
+
+
+</mapper>

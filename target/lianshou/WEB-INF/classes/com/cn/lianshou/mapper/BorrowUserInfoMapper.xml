@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.lianshou.mapper.BorrowUserInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.cn.lianshou.entity.BorrowUserInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="id_no" property="idNo" jdbcType="VARCHAR" />
+    <result column="urge_name_one" property="urgeNameOne" jdbcType="VARCHAR" />
+    <result column="urge_relation_one" property="urgeRelationOne" jdbcType="VARCHAR" />
+    <result column="urge_phone_one" property="urgePhoneOne" jdbcType="VARCHAR" />
+    <result column="urge_name_tow" property="urgeNameTow" jdbcType="VARCHAR" />
+    <result column="urge_relation_tow" property="urgeRelationTow" jdbcType="VARCHAR" />
+    <result column="urge_phone_tow" property="urgePhoneTow" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="req_ext1" property="reqExt1" jdbcType="VARCHAR" />
+    <result column="req_ext2" property="reqExt2" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <!-- 基本的sql查询条件公共引用 -->
+  <sql id="searchBy">
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test=" id != null and id != '' ">
+        id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test=" channel != null and channel != '' ">
+        channel = #{channel,jdbcType=VARCHAR}
+      </if>
+      <if test="realName != null and realName != '' ">
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null and phone != '' ">
+        and phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="sex != null and sex != '' ">
+        and sex = #{sex,jdbcType=VARCHAR}
+      </if>
+      <if test="age != null and age != '' ">
+        and age = #{age,jdbcType=VARCHAR}
+      </if>
+      <if test="idNo != null and idNo != '' ">
+        and id_no = #{idNo,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="selectBorrowUserInfo" parameterType="java.util.HashMap" resultMap="BaseResultMap">
+    SELECT * FROM cs_borrow_user_info
+    <include refid="searchBy" />
+  </select>
+
+  <insert id="insert" parameterType="com.cn.lianshou.entity.BorrowUserInfo">
+    INSERT INTO cs_borrow_user_info (channel,real_name,phone,sex,age,id_no,urge_name_one,urge_relation_one,urge_phone_one,urge_name_tow,urge_relation_tow,urge_phone_tow,create_time,update_time,req_ext1,req_ext2)
+    VALUES (#{channel},#{realName},#{phone},#{sex},#{age},#{idNo},#{urgeNameOne},#{urgeRelationOne},#{urgePhoneOne},#{urgeNameTow},#{urgeRelationTow},#{urgePhoneTow},now(),now(),NULL,NULL)
+  </insert>
+
+
+</mapper>
